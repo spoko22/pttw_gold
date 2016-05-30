@@ -2,8 +2,18 @@
 
 import numpy
 
+
 def autocorrelation(input_seq):
     return correlation(input_seq, input_seq)
+
+
+def n_correlation(in_seq1, in_seq2):
+    if len(in_seq1) != len(in_seq2):
+        print 'Length of sequences should be the same! ' \
+              'Length of seq. 1. is ' + str(len(in_seq1)) + ' and length of seq. 2. is ' + str(len(in_seq2))
+        raise
+
+    return numpy.correlate(in_seq1, in_seq2, 'full')
 
 
 def correlation(in_seq1, in_seq2):
@@ -34,8 +44,8 @@ def correlation(in_seq1, in_seq2):
         value = 0
         for j in xrange(seq_length):
             value += (seq_stable[j] * seq_shift[j])
-        # value = value/float(seq_length)
-        # value = float("{0:.5f}".format(value))
+        value = value/float(seq_length)
+        value = float("{0:.5f}".format(value))
         values_set.append(value)
         seq_shift = numpy.roll(seq_shift, 1)
     return values_set
