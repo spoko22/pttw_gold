@@ -1,7 +1,26 @@
 # author: spoko
 
 import numpy
+import math
 import correlation as cor
+
+preferred_pairs = {5: [[5,2], [5,4,3,2]], 6: [[6,1], [6,5,2,1]], 7: [[7,3], [7,3,2,1]],
+                   # 8: [[8,7,6,5,2,1], [8,7,6,1]],
+                   9: [[9,4], [9,6,4,3]]}
+
+
+def generated_mls_from_preferred_pair(L):
+    if L in preferred_pairs:
+        register_1 = preferred_pairs[L][0]
+        register_2 = preferred_pairs[L][1]
+        return mls_generation(L, register_1), mls_generation(L, register_2)
+    elif L > 9:
+        print 'Generating code with ' + str(L) + ' registers would take too long. Aborting.'
+        return None, None
+    else:
+        print 'No preferred pairs for this length of shift registers'
+        return None, None
+
 
 def mls_generation(L, xors, seed=None):
     max_length = 2**L - 1
@@ -35,8 +54,35 @@ def mls_generation(L, xors, seed=None):
             return m_sequence
     return None
 
+
 def is_pair_preferred(seq1, seq2):
     if seq1 is None or seq2 is None:
+        print 'One or both of the sequences does not exist'
         return False
+    if len(seq1) != len(seq2):
+        print 'Sequences are not the same length'
+        return False
+
     values_set = set(cor.correlation(seq1, seq2))
-    return len(values_set) == 3
+
+    if len(values_set) == 3:
+        L = float(len(seq1))
+        l = math.log(int(L+1), 2)
+        m = 2 if l%2 == 0 else 1
+        t = float(1 + 2**((l+m)/2))
+
+        acceptable_values = [float("{0:.5f}".format(-t/L)), float("{0:.5f}".format(-1/L)), float("{0:.5f}".format((t-2)/L))]
+
+        for value in values_set:
+            if value not in acceptable_values:
+                message = 'Autocorrelation of preferred pair can only have three values and these are: '
+                for acceptable_value in acceptable_values:
+                    message += '\n' + str(acceptable_value)
+                message += '\nOne of existing values (' + str(value) + ') is not a valid one.'
+                print message
+                return False
+        print 'Preferred pair was found. Gold codes will be generated shortly.'
+        return True
+    else:
+        print 'Crosscorrelation function does not have three values: ' + str(len(values_set))
+        return False
