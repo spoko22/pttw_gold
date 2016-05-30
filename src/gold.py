@@ -13,6 +13,20 @@ preferred_pairs = {5: [[2], [1, 2, 3]], 6: [[5], [1, 4, 5]], 7: [[4], [4, 5, 6]]
                    8: [[1, 2, 3, 6, 7], [1, 2, 7]], 9: [[5], [3, 5, 6]],
                    10: [[2, 5, 9], [3, 4, 6, 8, 9]], 11: [[9], [3, 6, 9]]}
 
+def generate_gold(seq1, seq2):
+    gold_codes = []
+    for shift in range(len(seq1)):
+        bit_code = []
+        bool_code = numpy.logical_xor(seq1, seq2)
+        for i in xrange(len(bool_code)):
+            if bool_code[i]:
+                bit_code.append(1)
+            else:
+                bit_code.append(0)
+        gold_codes.append(bit_code)
+        seq2 = numpy.roll(seq2, 1)
+    return gold_codes
+
 
 def gen_gold(seq1, seq2):
     """Function to produce a gold sequence based on two input preferred pair
