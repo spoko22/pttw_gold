@@ -9,9 +9,9 @@ import correlation
 import m_sequence
 
 
-# seq1 = m_sequence.mls_generation(5, [5,3])
-# seq2 = m_sequence.mls_generation(5, [5,4,3,2])
-seq1, seq2 = m_sequence.generated_mls_from_preferred_pair(6)
+seq1 = m_sequence.mls_generation(5, [5,3])
+seq2 = m_sequence.mls_generation(5, [5,1,3,2])
+# seq1, seq2 = m_sequence.generated_mls_from_preferred_pair(6)
 is_preferred = m_sequence.is_pair_preferred(seq1, seq2)
 
 if is_preferred:
