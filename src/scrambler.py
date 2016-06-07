@@ -8,12 +8,20 @@ import sequence_converter as seq_conv
 
 print("SCRAMBLER")
 print("Your file should have one line constisting of zeros and ones. No commas, no white spaces, no dots, no JSON structures, just zeros and ones like this: 0101010101")
-user_file_input = raw_input("Enter the path of the file which content you want to scramble: ")
+while True:
+    try:
+        user_file_input = raw_input("Enter the path of the file which content you want to scramble: ")
 
-assert os.path.exists(user_file_input), "I did not find the file at, " +str(user_file_input)
-f = open(user_file_input, 'r+')
-sequence = seq_conv.transform_string_to_array(f.read().rstrip())
+        assert os.path.exists(user_file_input)
+        f = open(user_file_input, 'r+')
+        break
+    except AssertionError:
+        print "I did not find the file at " +str(user_file_input)
+        continue
+
+sequence = f.read().rstrip()
 print('OK, I read your input. Please, be aware that the scrambler reads ONLY one, first line. Your file is:\n') + str(sequence)
+sequence = seq_conv.transform_string_to_array(sequence)
 
 print('Now we need the desired length of LSFR. Assuming the value you enter here is called \'L\' the length of Gold sequence will be 2^L - 1.')
 user_gold_length = 0
@@ -21,7 +29,11 @@ while True:
     available_lengths = m_sequence.available_lengths
     for length in available_lengths:
         print "L = " + str(length) + ", which produces Gold sequence with length: " + str((2**length)-1)
-    user_gold_length = int(raw_input("Enter the length of LSFR: "))
+    try:
+        user_gold_length = int(raw_input("Enter the length of LSFR: "))
+    except ValueError:
+        print "Length must be a number!"
+        continue
     if user_gold_length in available_lengths:
         break
     else:
