@@ -8,6 +8,8 @@ preferred_pairs = {5: [[5,2], [5,4,3,2]], 6: [[6,1], [6,5,2,1]], 7: [[7,3], [7,3
                    # 8: [[8,7,6,5,2,1], [8,7,6,1]],
                    9: [[9,4], [9,6,4,3]]}
 
+available_lengths = preferred_pairs.keys()
+
 
 def generated_mls_from_preferred_pair(L):
     if L in preferred_pairs:
