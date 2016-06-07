@@ -6,8 +6,9 @@ import gold
 import random as rnd
 import sequence_converter as seq_conv
 
+print("SCRAMBLER")
 print("Your file should have one line constisting of zeros and ones. No commas, no white spaces, no dots, no JSON structures, just zeros and ones like this: 0101010101")
-user_file_input = raw_input("Enter the path of your file: ")
+user_file_input = raw_input("Enter the path of the file which content you want to scramble: ")
 
 assert os.path.exists(user_file_input), "I did not find the file at, " +str(user_file_input)
 f = open(user_file_input, 'r+')
@@ -37,8 +38,8 @@ if user_gold_length > 0:
     gold_file.close()
     print 'Your gold code was written to file: ' + gold_code_filename + '. Don\'t lose this, you will need this code to descramble the message!'
     scrambler = scrambling.Scrambler(gold_code)
-    scrambled_sequence_filename = 'output.txt'
-    scrambled_sequence = open('output.txt', 'w+')
+    scrambled_sequence_filename = 'scrambled_output.txt'
+    scrambled_sequence = open(scrambled_sequence_filename, 'w+')
     scrambled_sequence.write(seq_conv.transform_array_to_string(scrambler.scramble(sequence)))
     scrambled_sequence.close()
     print 'The scrambled sequence was written to file: ' + scrambled_sequence_filename + '. Insert this file along with Gold code into the descrambler to see the world being descrambled.'
